@@ -4,6 +4,7 @@ import 'package:myshop/ui/product/products_overview_screen.dart';
 import 'ui/product/product_detail_screen.dart';
 import 'ui/product/products_manager.dart';
 import 'ui/product/user_products_screen.dart';
+import 'ui/cart/cart_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,21 @@ class MyApp extends StatelessWidget {
       surfaceTint: Colors.grey[200],
     );
 
+    final themeData = ThemeData(
+      // Thêm định nghĩa dialogTheme vào ThemeData
+      dialogTheme: DialogTheme(
+        titleTextStyle: TextStyle(
+          color: colorScheme.onBackground,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+        contentTextStyle: TextStyle(
+          color: colorScheme.onBackground,
+          fontSize: 20,
+        ),
+      ),
+    );
+
     return MaterialApp(
       title: 'My Shop',
       debugShowCheckedModeBanner: false,
@@ -34,7 +50,7 @@ class MyApp extends StatelessWidget {
             shadowColor: colorScheme.shadow),
       ),
       home: const SafeArea(
-        child: UserProductsScreen(),
+        child: CartScreen(),
       ),
     );
   }
