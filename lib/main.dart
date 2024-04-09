@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myshop/ui/product/products_overview_screen.dart';
 import 'ui/product/product_detail_screen.dart';
 import 'ui/product/products_manager.dart';
+import 'ui/product/user_products_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,8 +33,8 @@ class MyApp extends StatelessWidget {
             elevation: 4,
             shadowColor: colorScheme.shadow),
       ),
-      home: SafeArea(
-        child: ProductDetailScreen(ProductsManager().items[0]),
+      home: const SafeArea(
+        child: UserProductsScreen(),
       ),
     );
   }
