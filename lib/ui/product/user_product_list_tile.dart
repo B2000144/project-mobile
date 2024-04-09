@@ -26,7 +26,7 @@ class UserProductListTile extends StatelessWidget {
                   ..showSnackBar(
                     const SnackBar(
                       content: Text(
-                        'Delete a product',
+                        'Edit product',
                         textAlign: TextAlign.center,
                       ),
                     ),
