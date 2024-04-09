@@ -16,7 +16,7 @@ class ProductGirdTile extends StatelessWidget {
           footer: ProductGirdFooter(
             product: product,
             onFavoritePressed: () {
-              print('Toggle a favorite product');
+              product.isFavorite = !product.isFavorite;
             },
             onAddToCartPressed: () {
               print('Add item to cart');
@@ -54,12 +54,17 @@ class ProductGirdFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridTileBar(
         backgroundColor: Colors.black87,
-        leading: IconButton(
-          icon: Icon(
-            product.isFavorite == true ? Icons.favorite : Icons.favorite_border,
-          ),
-          color: Theme.of(context).colorScheme.secondary,
-          onPressed: onFavoritePressed,
+        leading: ValueListenableBuilder<bool>(
+          valueListenable: product.isFavoriteListenable,
+          builder: (ctx, isFavorite, child) {
+            return IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+              ),
+              color: Theme.of(context).colorScheme.secondary,
+              onPressed: onFavoritePressed,
+            );
+          },
         ),
         title: Text(
           product.title ?? '',

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'products_grid.dart';
 import 'package:myshop/ui/shared/app_drawer.dart';
+import 'top_right_badge.dart';
+import '../cart/cart_manager.dart';
 
 enum FilterOptions { favorites, all }
 
@@ -72,11 +74,14 @@ class ShoppingCartButton extends StatelessWidget {
   final void Function()? onPressed;
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(
-        Icons.shopping_cart,
+    return TopRightBadge(
+      data: CartManager().productCount,
+      child: IconButton(
+        icon: const Icon(
+          Icons.shopping_cart,
+        ),
+        onPressed: onPressed,
       ),
-      onPressed: onPressed,
     );
   }
 }
