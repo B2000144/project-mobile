@@ -3,6 +3,7 @@ import 'products_grid.dart';
 import 'package:myshop/ui/shared/app_drawer.dart';
 import 'top_right_badge.dart';
 import '../cart/cart_manager.dart';
+import 'package:provider/provider.dart';
 
 enum FilterOptions { favorites, all }
 
@@ -74,14 +75,19 @@ class ShoppingCartButton extends StatelessWidget {
   final void Function()? onPressed;
   @override
   Widget build(BuildContext context) {
-    return TopRightBadge(
-      data: CartManager().productCount,
-      child: IconButton(
-        icon: const Icon(
-          Icons.shopping_cart,
-        ),
-        onPressed: onPressed,
-      ),
+// Truy xuất CartManager thông qua widget Consumer
+    return Consumer<CartManager>(
+      builder: (ctx, cartManager, child) {
+        return TopRightBadge(
+          data: cartManager.productCount,
+          child: IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+            ),
+            onPressed: onPressed,
+          ),
+        );
+      },
     );
   }
 }
