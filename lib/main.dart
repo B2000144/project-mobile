@@ -7,6 +7,7 @@ import 'ui/product/user_products_screen.dart';
 import 'ui/cart/cart_screen.dart';
 import 'ui/order/orders_screen.dart';
 import 'ui/screens.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,51 +39,60 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-    return MaterialApp(
-      title: 'My Shop',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Lato',
-        colorScheme: colorScheme,
-        appBarTheme: AppBarTheme(
-            backgroundColor: colorScheme.primary,
-            foregroundColor: colorScheme.onPrimary,
-            elevation: 4,
-            shadowColor: colorScheme.shadow),
-      ),
-      home: const MyHomePage(),
-      routes: {
-        CartScreen.routeName: (ctx) => const SafeArea(
-              child: CartScreen(),
-            ),
-        OrdersScreen.routeName: (ctx) => const SafeArea(
-              child: OrdersScreen(),
-            ),
-        UserProductsScreen.routeName: (ctx) => const SafeArea(
-              child: UserProductsScreen(),
-            ),
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == ProductDetailScreen.routeName) {
-          final productId = settings.arguments as String;
-          final product = ProductsManager().findById(productId);
-          if (product != null) {
-            // Kiểm tra xem product có null không
-            return MaterialPageRoute(
-              settings: settings,
-              builder: (ctx) {
-                return SafeArea(
-                  child: ProductDetailScreen(product), // Truyền product vào đây
-                );
-              },
-            );
-          } else {
-            // Xử lý trường hợp product không tồn tại
-            // Ví dụ: Hiển thị một thông báo lỗi hoặc chuyển hướng đến màn hình khác
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => ProductsManager(),
+        )
+      ],
+      child: MaterialApp(
+        title: 'My Shop',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Lato',
+          colorScheme: colorScheme,
+          appBarTheme: AppBarTheme(
+              backgroundColor: colorScheme.primary,
+              foregroundColor: colorScheme.onPrimary,
+              elevation: 4,
+              shadowColor: colorScheme.shadow),
+        ),
+        home: const MyHomePage(),
+        routes: {
+          CartScreen.routeName: (ctx) => const SafeArea(
+                child: CartScreen(),
+              ),
+          OrdersScreen.routeName: (ctx) => const SafeArea(
+                child: OrdersScreen(),
+              ),
+          UserProductsScreen.routeName: (ctx) => const SafeArea(
+                child: UserProductsScreen(),
+              ),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == ProductDetailScreen.routeName) {
+            final productId = settings.arguments as String;
+            final product = ProductsManager().findById(productId);
+            if (product != null) {
+              // Kiểm tra xem product có null không
+              return MaterialPageRoute(
+                settings: settings,
+                builder: (ctx) {
+                  return SafeArea(
+                    child: ProductDetailScreen(
+                      ctx.read<ProductsManager>().findById(productId)!,
+                    ),
+                  );
+                },
+              );
+            } else {
+              // Xử lý trường hợp product không tồn tại
+              // Ví dụ: Hiển thị một thông báo lỗi hoặc chuyển hướng đến màn hình khác
+            }
           }
-        }
-        return null;
-      },
+          return null;
+        },
+      ),
     );
   }
 }

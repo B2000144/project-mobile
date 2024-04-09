@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
-
+import 'package:provider/provider.dart';
 import '../../models/product.dart';
+import '../product/products_manager.dart';
 
 class UserProductListTile extends StatelessWidget {
   final Product product;
@@ -33,7 +34,22 @@ class UserProductListTile extends StatelessWidget {
                   );
               },
             ),
-            const DeleteUserProductButton(),
+            DeleteUserProductButton(
+              onPressed: () {
+// Đọc ra ProductsManager để xóa product
+                context.read<ProductsManager>().deleteProduct(product.id!);
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Product deleted',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+              },
+            ),
           ],
         ),
       ),
