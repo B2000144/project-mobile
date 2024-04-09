@@ -55,3 +55,21 @@ class ActionButton extends StatelessWidget {
     );
   }
 }
+
+Future<void> showErrorDialog(BuildContext context, String message) {
+  return showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      icon: const Icon(Icons.error),
+      title: const Text('An Error Occurred!'),
+      content: Text(message),
+      actions: <Widget>[
+        ActionButton(
+          onPressed: () {
+            Navigator.of(ctx).pop();
+          },
+        ),
+      ],
+    ),
+  );
+}

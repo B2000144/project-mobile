@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myshop/ui/product/edit_product_screen.dart';
 import 'package:myshop/ui/product/products_overview_screen.dart';
 import 'ui/product/product_detail_screen.dart';
 import 'ui/product/products_manager.dart';
@@ -52,53 +53,47 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'My Shop',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: 'Lato',
-          colorScheme: colorScheme,
-          appBarTheme: AppBarTheme(
-              backgroundColor: colorScheme.primary,
-              foregroundColor: colorScheme.onPrimary,
-              elevation: 4,
-              shadowColor: colorScheme.shadow),
-        ),
-        home: const MyHomePage(),
-        routes: {
-          CartScreen.routeName: (ctx) => const SafeArea(
-                child: CartScreen(),
-              ),
-          OrdersScreen.routeName: (ctx) => const SafeArea(
-                child: OrdersScreen(),
-              ),
-          UserProductsScreen.routeName: (ctx) => const SafeArea(
-                child: UserProductsScreen(),
-              ),
-        },
-        onGenerateRoute: (settings) {
-          if (settings.name == ProductDetailScreen.routeName) {
-            final productId = settings.arguments as String;
-            final product = ProductsManager().findById(productId);
-            if (product != null) {
+          title: 'My Shop',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            fontFamily: 'Lato',
+            colorScheme: colorScheme,
+            appBarTheme: AppBarTheme(
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
+                elevation: 4,
+                shadowColor: colorScheme.shadow),
+          ),
+          home: const MyHomePage(),
+          routes: {
+            CartScreen.routeName: (ctx) => const SafeArea(
+                  child: CartScreen(),
+                ),
+            OrdersScreen.routeName: (ctx) => const SafeArea(
+                  child: OrdersScreen(),
+                ),
+            UserProductsScreen.routeName: (ctx) => const SafeArea(
+                  child: UserProductsScreen(),
+                ),
+          },
+          onGenerateRoute: (settings) {
+            if (settings.name == EditProductScreen.routeName) {
+              final productId = settings.arguments as String?;
               // Kiểm tra xem product có null không
               return MaterialPageRoute(
-                settings: settings,
                 builder: (ctx) {
                   return SafeArea(
-                    child: ProductDetailScreen(
-                      ctx.read<ProductsManager>().findById(productId)!,
+                    child: EditProductScreen(
+                      productId != null
+                          ? ctx.read<ProductsManager>().findById(productId)
+                          : null,
                     ),
                   );
                 },
               );
-            } else {
-              // Xử lý trường hợp product không tồn tại
-              // Ví dụ: Hiển thị một thông báo lỗi hoặc chuyển hướng đến màn hình khác
             }
-          }
-          return null;
-        },
-      ),
+            return null;
+          }),
     );
   }
 }
