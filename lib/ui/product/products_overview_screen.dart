@@ -35,7 +35,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
           ShoppingCartButton(
             onPressed: () {
-              print('Go cart screen');
+              Navigator.pushNamed(context, '/cart');
             },
           ),
         ],
