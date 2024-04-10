@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myshop/ui/product/user_product_list_tile.dart';
 import 'package:myshop/ui/screens.dart';
+import 'package:myshop/ui/shared/app_drawer.dart';
 import 'package:provider/provider.dart';
 import 'products_manager.dart';
 import 'edit_product_screen.dart';
@@ -24,7 +25,21 @@ class UserProductsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const UserProductList(),
+      drawer: const AppDrawer(),
+      body: FutureBuilder(
+        future: context.read<ProductsManager>().fetchProducts(),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return RefreshIndicator(
+            onRefresh: () => context.read<ProductsManager>().fetchProducts(),
+            child: const UserProductList(),
+          );
+        },
+      ),
     );
   }
 }
