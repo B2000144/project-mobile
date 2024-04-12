@@ -26,23 +26,33 @@ class ProductsManager with ChangeNotifier {
     }
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(product) async {
     final index = _items.indexWhere((item) => item.id == product.id);
     if (index >= 0) {
-      _items[index] = product;
-      notifyListeners();
+      if (await _productService.updateProduct(product)) {
+        _items[index] = product;
+        notifyListeners();
+      }
     }
   }
 
-  void toggleFavoriteStatus(Product product) {
+  void toggleFavoriteStatus(Product product) async {
     final saveStatus = product.isFavorite;
     product.isFavorite = !saveStatus;
+    if (!await _productService.saveFavoriteStatus(product)) {
+      product.isFavorite = saveStatus;
+    }
   }
 
-  void deleteProduct(String id) {
+  void deleteProduct(String id) async {
     final index = _items.indexWhere((item) => item.id == id);
+    Product? existringProduct = _items[index];
     _items.removeAt(index);
     notifyListeners();
+    if (!await _productService.deleteProduct(id)) {
+      _items.insert(index, existringProduct);
+      notifyListeners();
+    }
   }
 
   int get itemCount {

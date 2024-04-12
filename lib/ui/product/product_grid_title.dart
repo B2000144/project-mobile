@@ -13,7 +13,7 @@ class ProductGirdTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-        borderRadius: BorderRadius.circular(1),
+        borderRadius: BorderRadius.circular(15),
         child: GridTile(
           footer: ProductGirdFooter(
             product: product,

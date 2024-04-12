@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:myshop/ui/order/order_manager.dart';
 import 'cart_manager.dart';
 import 'cart_item_card.dart';
+import 'cart_success.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -88,7 +89,13 @@ class CartSummary extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
             TextButton(
-              onPressed: onOrderNowPressed,
+              onPressed: onOrderNowPressed != null
+                  ? () {
+                      onOrderNowPressed!(); // Gọi hàm đã được định nghĩa ở CartScreen
+                      Navigator.of(context).pushNamed(CartSuccess
+                          .routeName); // Điều hướng sang trang CartSuccess
+                    }
+                  : null,
               style: TextButton.styleFrom(
                 textStyle: TextStyle(
                   color: Theme.of(context).colorScheme.primary,

@@ -118,7 +118,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   TextFormField _buildPriceField() {
     return TextFormField(
       initialValue: _editedProduct.price.toString(),
-      decoration: const InputDecoration(labelText: 'Price'),
+      decoration: const InputDecoration(labelText: 'price'),
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.number,
       validator: (value) {
@@ -134,9 +134,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         return null;
       },
       onSaved: (value) {
-        if (value != null && value.isNotEmpty) {
-          _editedProduct = _editedProduct.copyWith(price: double.parse(value));
-        }
+        _editedProduct = _editedProduct.copyWith(price: double.parse(value!));
       },
     );
   }
@@ -224,12 +222,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
     try {
       final productsManager = context.read<ProductsManager>();
       if (_editedProduct.id != null) {
-        productsManager.updateProduct(_editedProduct);
+        await productsManager.updateProduct(_editedProduct);
       } else {
-        productsManager.addProduct(_editedProduct);
+        await productsManager.addProduct(_editedProduct);
       }
     } catch (error) {
-      await showErrorDialog(context, 'Something went wrong.');
+      if (mounted) {
+        await showErrorDialog(context, 'Something went wrong.');
+      }
     }
     setState(() {
       _isLoading = false;
